@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3D645E67-FBAD-4B0F-A6A0-43F3FEF18FC7}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QCMS.Schemas.Api", "src\QCMS.Schemas.Api\QCMS.Schemas.Api.csproj", "{6A18D9F7-5AB7-4AA5-AE6B-FEF39E3DEF9B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QCMS.Schemas.Api.Tests", "src\QCMS.Schemas.Api.Tests\QCMS.Schemas.Api.Tests.csproj", "{337161B1-DA30-45A3-AAD7-7117EC2E2D80}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A18D9F7-5AB7-4AA5-AE6B-FEF39E3DEF9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A18D9F7-5AB7-4AA5-AE6B-FEF39E3DEF9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A18D9F7-5AB7-4AA5-AE6B-FEF39E3DEF9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A18D9F7-5AB7-4AA5-AE6B-FEF39E3DEF9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{337161B1-DA30-45A3-AAD7-7117EC2E2D80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{337161B1-DA30-45A3-AAD7-7117EC2E2D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{337161B1-DA30-45A3-AAD7-7117EC2E2D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{337161B1-DA30-45A3-AAD7-7117EC2E2D80}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C9CC0237-ED65-4951-B659-0906A83B765A}
+	EndGlobalSection
+EndGlobal
