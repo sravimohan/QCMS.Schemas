@@ -1,18 +1,18 @@
 ﻿namespace QCMS.Schemas.Api.Tests.Services.Forms.Contract;
 
-internal class Property
+public class Property
 {
-    internal string Id { get; init; } = default!;
-    internal long Version { get; init; } = default!;
+    public string Id { get; init; } = default!;
+    public long Version { get; init; } = default!;
 
-    internal string Title { get; init; } = default!;
+    public string Title { get; init; } = default!;
 
-    internal string Type { get; init; } = default!;
+    public string Type { get; init; } = default!;
 
-    internal string Format { get; init; } = default!;
+    public string Format { get; init; } = default!;
 
-    internal string? Default { get; init; }
+    public string? Default { get; init; }
 
-    internal string[]? Enum { get; init; }
-    internal string[]? EnumNames { get; init; }
+    public string[]? Enum { get; init; }
+    public string[]? EnumNames { get; init; }
 }

@@ -6,7 +6,7 @@ public record Form
 
     public string Title { get; init; } = default!;
 
-    internal List<FormItem> FormItems { get; init; } = default!;
+    public IEnumerable<FormItem> FormItems { get; init; } = default!;
 }
 
 public record FormItem

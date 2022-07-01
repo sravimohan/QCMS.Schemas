@@ -1,25 +1,31 @@
-﻿using QCMS.Security.Authorization;
-
-namespace QCMS.Schemas.Api.Services
+﻿namespace QCMS.Schemas.Api.Services
 {
     internal abstract class HttpClientService
     {
-        readonly HttpClient _httpClient;
-
         protected abstract string ClientName { get; }
 
-        public HttpClientService(IHttpClientFactory httpClientFactory, TenantScope tenantScope)
+        readonly IHttpClientFactory _httpClientFactory;
+
+        HttpClient HttpClientInstance() => _httpClientFactory.CreateClient(ClientName);
+
+        public HttpClientService(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClientFactory.CreateClient(ClientName);
-            _httpClient.DefaultRequestHeaders.Add("Authorization", tenantScope.AuthorizationToken);
+            _httpClientFactory = httpClientFactory;
         }
 
-        internal async Task<T?> Get<T>(string url, CancellationToken cancellationToken = default) =>
-             await _httpClient.GetFromJsonAsync<T>(url, cancellationToken: cancellationToken);
+        internal async Task<T?> Get<T>(string url, CancellationToken cancellationToken = default)
+        {
+            //var response = await HttpClientInstance().GetFromJsonAsync<T>(url, cancellationToken: cancellationToken);
+            var httpClient = HttpClientInstance();
+            var response = await httpClient.GetAsync(url, cancellationToken: cancellationToken);
+            var json = await response.Content.ReadFromJsonAsync<T>(cancellationToken: cancellationToken);
+
+            return json;
+        }
 
         internal async Task<TOut?> Post<TIn, TOut>(string url, TIn request, CancellationToken cancellationToken = default)
         {
-            var response = await _httpClient.PostAsJsonAsync(url, request, cancellationToken);
+            var response = await HttpClientInstance().PostAsJsonAsync(url, request, cancellationToken);
             if (response == null || !response.IsSuccessStatusCode || response.Content == null)
                 throw new Exception("Invalid Request");
 
@@ -27,3 +33,4 @@ namespace QCMS.Schemas.Api.Services
         }
     }
 }
+ 

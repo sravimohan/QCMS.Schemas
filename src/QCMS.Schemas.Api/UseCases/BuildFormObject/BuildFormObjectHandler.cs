@@ -10,13 +10,16 @@ namespace QCMS.Schemas.Api.UseCases.BuildFormObject
         readonly FormService _formService;
         readonly QuestionService _questionService;
 
-        public BuildFormObjectHandler(FormService formService, QuestionService questionService)
+        public BuildFormObjectHandler(
+            FormService formService,
+            QuestionService questionService)
         {
             _formService = formService;
             _questionService = questionService;
         }
 
-        internal async Task<FormObject> BuildFormObject(string formId, long? version = null, CancellationToken cancellationToken = default)
+        internal async Task<FormObject> BuildFormObject(
+            string formId, long? version = null, CancellationToken cancellationToken = default)
         {
             var form = await _formService.GetForm(formId, version, cancellationToken);
 
@@ -33,7 +36,7 @@ namespace QCMS.Schemas.Api.UseCases.BuildFormObject
             return formObject;
         }
 
-        private async Task<Dictionary<string, Property>> GetFormProperties(
+        async Task<Dictionary<string, Property>> GetFormProperties(
             IEnumerable<QuestionKey> questionKeys, CancellationToken cancellationToken)
         {
             var properties = new Dictionary<string, Property>();

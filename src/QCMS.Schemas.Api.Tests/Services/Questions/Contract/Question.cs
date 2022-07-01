@@ -1,5 +1,9 @@
 ﻿namespace QCMS.Schemas.Api.Tests.Services.Questions.Contract;
 
+public record BatchPutRequest(IEnumerable<Question> Questions);
+
+public record BatchPutResponse(IEnumerable<string> QuestionIds);
+
 public record Question
 {
     public string QuestionId { get; init; } = default!;

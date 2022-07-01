@@ -7,8 +7,8 @@ namespace QCMS.Schemas.Api.Services.Questions
     {
         protected override string ClientName => HttpClientName.Questions;
 
-        public QuestionService(IHttpClientFactory httpClientFactory, TenantScope tenantScope)
-            : base(httpClientFactory, tenantScope)
+        public QuestionService(IHttpClientFactory httpClientFactory)
+            : base(httpClientFactory)
         { }
 
         public async Task<IEnumerable<Question>> GetQuestions(
@@ -16,7 +16,7 @@ namespace QCMS.Schemas.Api.Services.Questions
             CancellationToken cancellationToken = default)
         {
             var request = new GetBatchRequest(questionKeys);
-            var response = await Post<GetBatchRequest, GetBatchResponse>("get-batch", request, cancellationToken);
+            var response = await Post<GetBatchRequest, GetBatchResponse>("get", request, cancellationToken);
             return response?.Questions ?? Enumerable.Empty<Question>();
         }
     }

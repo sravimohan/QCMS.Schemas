@@ -1,20 +1,16 @@
 ﻿namespace QCMS.Schemas.Api.Tests.Services.Forms.Contract;
 
-internal record FormObject
+public record FormObject
 {
-    internal string FormId { get; init; } = default!;
+    public string FormId { get; init; } = default!;
 
-    internal string Title { get; init; } = default!;
+    public string Title { get; init; } = default!;
 
-    internal string Type => "object";
+    public string Type => "object";
 
-    internal List<string> Required { get; init; } = default!;
+    public List<string> Required { get; init; } = default!;
 
-    internal Dictionary<string, Property> Properties { get; init; } = default!;
+    public Dictionary<string, Property> Properties { get; init; } = default!;
 
-    internal long Version { get; init; } = default!;
-
-
-    [Obsolete("only for serialization", true)]
-    internal FormObject() { }
+    public long Version { get; init; } = default!;
 }

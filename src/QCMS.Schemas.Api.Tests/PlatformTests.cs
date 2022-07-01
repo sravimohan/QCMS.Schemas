@@ -5,6 +5,7 @@ using QCMS.Schemas.Api.Tests.Services.Forms;
 using QCMS.Schemas.Api.Tests.Services.Forms.Contract;
 using QCMS.Schemas.Api.Tests.Services.Questions;
 using QCMS.Schemas.Api.Tests.Services.Questions.Contract;
+using QCMS.Schemas.Api.Tests.Services.Schemas;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -14,10 +15,11 @@ public class PlatformTests
 {
     const string QuestionServiceBaseUrl = "http://localhost:6000";
     const string FormServiceBaseUrl = "http://localhost:6010";
-    const string AuthorizationToken = "Bearer eyJraWQiOiJnQkJBSHE5VEVMSk5pQ0dZakQ3SVFyZ1FcL0YwZE9jVDcxeVwvOFJwdnZabkU9IiwiYWxnIjoiUlMyNTYifQ.eyJhdF9oYXNoIjoiVVRBVkZEU0RPb1FIQ2NWcmdFbklxQSIsInN1YiI6IjAzMDA2ZTIzLWRjMjctNDMyMi04Y2ZmLTY2Mzg1N2I2YTgyZCIsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC5hcC1zb3V0aGVhc3QtMi5hbWF6b25hd3MuY29tXC9hcC1zb3V0aGVhc3QtMl92MlFPZHNoeHIiLCJjb2duaXRvOnVzZXJuYW1lIjoiMDMwMDZlMjMtZGMyNy00MzIyLThjZmYtNjYzODU3YjZhODJkIiwib3JpZ2luX2p0aSI6IjU5MTI4MjFmLTY5NDMtNGZiYS1iZWIwLTBiNTUyZTM3NDVjNCIsImF1ZCI6IjZsaHE4bW1vazEzdG90ZGczam81YXNyZ2VjIiwidG9rZW5fdXNlIjoiaWQiLCJjdXN0b206VGVuYW50SWQiOiJiOGY5YmIwNC01ODQ2LTQ4MTItOGI1Ni02YTU0YjdiMDc4ZGQiLCJhdXRoX3RpbWUiOjE2NTQ3NTY4MjQsImV4cCI6MTY1NDkwNzkzNCwiaWF0IjoxNjU0OTA0MzM0LCJqdGkiOiJkZmJkOGNlZi00ZWU3LTQ1YzEtODNmOC01MGJmZDM5OWNjOTciLCJlbWFpbCI6InJhdmkubW9oYW5Acm9vbmdhLmNvbS5hdSJ9.UOsKnFSzDtdEXKQUsCLX7QeuHN73YfBFUaWbpau5XxP49SgXA9aXLjLE-Yzi8x0Ptvu7wpvNzB5-9p7kijNFVG5swU47btSMNwe0rPc7D2rKg6-nmILkUHR0w5yh-5aVKp3yUoPkCtcRkA_QuTrvLCU_N_DD_KRvZsiYWGIBinTo4ah9dEQbaiA9oI2scLv8a-OS15J2xGfbY_De0YQpUh5nIt_yZG1d9WhP2vdrw_cXUMSotOoyyYzd3hzbWR-wgqCb8_0cCgQ2O5hGMINB_o7iqL2AnYzSZk8d6mbQCOk3-AMCPlziWyU7DcjNRcWvic9ZFm14ZGxrd37y8xKFOw";
+    const string SchemaServiceBaseUrl = "http://localhost:6020";
+    const string AuthorizationToken = "Bearer eyJraWQiOiJKMlJDa1pJckRIZmtha09JZVY1dCtnZVZEMUw4Y1lyNVY1VlRyZ3o4bXZvPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJkNmIzOTM4OS00YjFiLTRmYzYtOTEzYS05MmZlMjQxNDVlNzQiLCJ6b25laW5mbyI6IkF1c3RyYWxpYVwvU3lkbmV5IiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC5hcC1zb3V0aGVhc3QtMi5hbWF6b25hd3MuY29tXC9hcC1zb3V0aGVhc3QtMl9tRUFwMW5EeG0iLCJjb2duaXRvOnVzZXJuYW1lIjoiZDZiMzkzODktNGIxYi00ZmM2LTkxM2EtOTJmZTI0MTQ1ZTc0IiwiZ2l2ZW5fbmFtZSI6IlJhdmkiLCJsb2NhbGUiOiJlbi1BVSIsIm9yaWdpbl9qdGkiOiJmMTk4NzVlYy02MmUzLTQ2NzQtOWQ2Mi03ZmJmYzJkNThjZmYiLCJhdWQiOiIzNm43bWtvNDY3ZHBtb3BjaW1uMTVrYnFyMyIsImV2ZW50X2lkIjoiZmY5NzcyODAtMmJlYi00MjM1LWFhYjgtMWNmNGFmYmI5MGZiIiwidG9rZW5fdXNlIjoiaWQiLCJjdXN0b206VGVuYW50SWQiOiJiOGY5YmIwNC01ODQ2LTQ4MTItOGI1Ni02YTU0YjdiMDc4ZGQiLCJhdXRoX3RpbWUiOjE2NTYyODIyNTAsImV4cCI6MTY1NjQ1MTAxOSwiaWF0IjoxNjU2NDQ3NDE5LCJmYW1pbHlfbmFtZSI6Ik1vaGFuIiwianRpIjoiYThhNDc1ZjQtMzhmMS00MGVmLTk2ODktMGZkZDA5MDU0N2JmIiwiZW1haWwiOiJzcmF2aW1vaGFuQGdtYWlsLmNvbSJ9.HScXHx_yF1gnNACXRfmltvmuo1DzoQXUi-DQ2cYjOlwfTkYi0ongJj9xyhcoyb4MI1anXjM2ygmF-KUE4tTmeM6U50HO4StMpksb6PjiKVZj0zmWeBuQinhGur6H1gqoAP7hsZqdUf0BzA5SdXQkwbEoYVu-eC0sdFWoDEUNtpwhYKbwVeGzD1RlhHseHffhSmxTgz1zStKAbUKq1_r7RmENNHID91UVAu6F7bXiUndKBTHM1APjqR2qs8lmNsa4yU4dc_qZgdiwwszbv6v8d-0X5jS9I6-1k_9lQoa88kxySFmhv8NZbwtB3OzFaqLn8tkcyot2s_V6l6AWsA0iGg";
 
     [Fact]
-     public async Task Can_create_schemaAsync()
+    public async Task Can_create_schemaAsync()
     {
         var serviceCollection = new ServiceCollection();
 
@@ -44,14 +46,12 @@ public class PlatformTests
 
         var newQuestion1 = new Question
         {
-            QuestionId = Guid.NewGuid().ToString(),
             Title = "Name",
             Type = QuestionType.String,
         };
 
         var newQuestion2 = new Question
         {
-            QuestionId = Guid.NewGuid().ToString(),
             Title = "State",
             Type = QuestionType.String,
             EnumValues = new List<EnumValue>
@@ -62,30 +62,42 @@ public class PlatformTests
             }
         };
 
-        var questionResponse1 = await questionService.PostAsJsonAsync<Question, QuestionResponse>(QuestionServiceBaseUrl, newQuestion1);
-        AssertEqualObject(newQuestion1, questionResponse1?.AsQuestion());
-
-        var questionResponse2 = await questionService.PostAsJsonAsync<Question, QuestionResponse>(QuestionServiceBaseUrl, newQuestion2);
-        AssertEqualObject(newQuestion2, questionResponse2?.AsQuestion());
+        var batchPutRequest = new BatchPutRequest(new Question[] { newQuestion1, newQuestion2 });
+        var batchPutResponse = await questionService.Put<BatchPutRequest, BatchPutResponse>(QuestionServiceBaseUrl, batchPutRequest);
 
         // create form
         var newform = new Form
         {
             FormId = Guid.NewGuid().ToString(),
             Title = "Test Form",
-            FormItems = new List<FormItem>
+            FormItems = batchPutResponse?.QuestionIds.Select(qId => new FormItem
             {
-                new FormItem{Id = newQuestion1.QuestionId, Type = "Question"},
-                new FormItem{Id = newQuestion2.QuestionId, Type = "Question"}
-            }
+                Id = qId,
+                Type = "Question"
+            }) ?? new List<FormItem>()
         };
 
         var formService = new FormService(httpClientFactory, tenantScope);
-        var formResponse = await formService.PostAsJsonAsync<Form, FormResponse>(FormServiceBaseUrl, newform);
+        var formResponse = await formService.Post<Form, FormResponse>(FormServiceBaseUrl, newform);
         AssertEqualObject(newform, formResponse?.AsForm());
 
-        // get schema
+        // get questions
+        //var getQuestionResponse1 = await questionService.Get<QuestionResponse>($"{QuestionServiceBaseUrl}/{newQuestion1.QuestionId}");
+        //AssertEqualObject(newQuestion1, getQuestionResponse1?.AsQuestion());
 
+        //var getQuestionResponse2 = await questionService.Get<QuestionResponse>($"{QuestionServiceBaseUrl}/{newQuestion2.QuestionId}");
+        //AssertEqualObject(newQuestion2, getQuestionResponse2?.AsQuestion());
+
+        // get form
+        var getFormResponse = await questionService.Get<FormResponse>($"{FormServiceBaseUrl}/{newform.FormId}");
+        AssertEqualObject(newform, getFormResponse?.AsForm());
+
+        // get schema
+        var schemaService = new SchemaService(httpClientFactory, tenantScope);
+        //failing here
+        var schemaResponse = await schemaService.Get<FormObject>($"{SchemaServiceBaseUrl}/{newform.FormId}");
+        Assert.NotNull(schemaResponse);
+        Assert.Equal(newform.FormItems.Count(), schemaResponse?.Properties.Count);
     }
 
     static void AssertEqualObject<T>(T expected, T actual) =>

@@ -15,13 +15,30 @@ namespace QCMS.Schemas.Api.Tests.Services
             _httpClient.DefaultRequestHeaders.Add("Authorization", tenantScope.AuthorizationToken);
         }
 
-        internal async Task<TOut?> PostAsJsonAsync<TIn, TOut>(string url, TIn request, CancellationToken cancellation = default)
+        internal async Task<T?> Get<T>(string url, CancellationToken cancellationToken = default)
         {
-            var response = await _httpClient.PostAsJsonAsync(url, request, cancellation);
+            var response = await _httpClient.GetAsync(url, cancellationToken: cancellationToken);
+            var json = await response.Content.ReadFromJsonAsync<T>(cancellationToken: cancellationToken);
+
+            return json;
+        }
+
+        internal async Task<TOut?> Post<TIn, TOut>(string url, TIn request, CancellationToken cancellationToken = default)
+        {
+            var response = await _httpClient.PostAsJsonAsync(url, request, cancellationToken);
             if (response == null || !response.IsSuccessStatusCode || response.Content == null)
                 throw new Exception("Invalid Request");
 
-            return await response.Content.ReadFromJsonAsync<TOut>(cancellationToken: cancellation);
+            return await response.Content.ReadFromJsonAsync<TOut>(cancellationToken: cancellationToken);
+        }
+
+        internal async Task<TOut?> Put<TIn, TOut>(string url, TIn request, CancellationToken cancellationToken = default)
+        {
+            var response = await _httpClient.PutAsJsonAsync(url, request, cancellationToken);
+            if (response == null || !response.IsSuccessStatusCode || response.Content == null)
+                throw new Exception("Invalid Request");
+
+            return await response.Content.ReadFromJsonAsync<TOut>(cancellationToken: cancellationToken);
         }
     }
 }
